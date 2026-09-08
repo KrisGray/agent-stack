@@ -23,7 +23,7 @@ $ARGUMENTS may carry a path to the agent-stack checkout, or the single word `aud
 
 Read: manifests (`package.json`, `pyproject.toml`, `requirements*.txt`, `go.mod`, `Cargo.toml`), `README*`, `AGENTS.md`, `docs/` listing, CI config, test layout, `git log --oneline -15`, and whether `.ai/` (specs, templates, tasks) exists.
 
-Find the **agent-stack checkout**: the path in `$ARGUMENTS`, else `.ai/pm/agent-stack-path` if present, else ask once in step 1 and record it. You need it for `templates/charter.md`, `templates/interview.md` + `templates/interview/` (the pack directory, including `PACKS.md` and `AI-INSTRUCTIONS.md`), `templates/pm-reference.md` and `bin/install.sh`.
+Find the **agent-stack checkout**: the path in `$ARGUMENTS`, else `.ai/pm/agent-stack-path` if present, else the installed package (`~/.pi/agent/npm/node_modules/agent-stack`, or `./.pi/npm/node_modules/agent-stack` for a project install — check both), else ask once in step 1 and record it. You need it for `templates/charter.md`, `templates/interview.md` + `templates/interview/` (the pack directory, including `PACKS.md` and `AI-INSTRUCTIONS.md`), `templates/pm-reference.md` and `bin/install.sh`.
 
 Inventory **installed personas and their current pins**: frontmatter `model:` / `thinking:` of every `*.md` in `~/.pi/agent/agents/` and `./.pi/agents/`. These are the pins step 6 audits.
 

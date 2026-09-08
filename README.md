@@ -33,10 +33,13 @@ pi install npm:agent-stack        # prompt templates (/pm, /hire-pm) load native
 # or from git:
 pi install git:github.com/KrisGray/agent-stack
 
-# personas (pi packages don't ship agents natively — copy step, like agent-skills)
-# from a checkout of this repo:
-bin/install.sh          # → ~/.pi/agent/agents/   (global)
-bin/install.sh -l       # → ./.pi/agents/         (this project only)
+# personas (pi packages don't ship agents natively — copy step, like agent-skills).
+# pi installs the package where the installer can find itself:
+PKG=~/.pi/agent/npm/node_modules/agent-stack      # global install
+# (project install: ./.pi/npm/node_modules/agent-stack)
+bash $PKG/bin/install.sh      # → ~/.pi/agent/agents/   (global)
+bash $PKG/bin/install.sh -l   # → ./.pi/agents/         (this project only)
+# from a git checkout of this repo, bin/install.sh works the same way
 ```
 
 Then in any project:
@@ -46,9 +49,9 @@ Then in any project:
                     # interview system (core bank + archetype packs + intake
                     # instructions + route hint), writes the model pin map —
                     # then installs the personas with the approved pins
-# or by hand:
+# or by hand (PKG as above, or a checkout):
 mkdir -p .ai/pm
-cp templates/charter.md .ai/pm/charter.md   # and fill it in
+cp $PKG/templates/charter.md .ai/pm/charter.md   # and fill it in
 /pm
 ```
 
@@ -76,9 +79,10 @@ docs/design.md     kernel/charter rationale, coverage map, /hire-pm design
 ## Status
 
 - [x] Kernel/charter split, nomgen extraction, team personas, `/pm` launcher
-- [x] `/hire-pm` interview compiler (catalog extractor + pin rendering, tested))
+- [x] `/hire-pm` interview compiler (catalog extractor + pin rendering, tested)
+- [x] Pack-based intake interview (core bank, PACKS index, AI intake instructions, 15 archetype packs)
+- [x] Package publication (npm + GitHub — listed on the [pi.dev gallery](https://pi.dev/packages))
 - [ ] Installable generic global contract (the TDD spine the kernel assumes)
-- [ ] Package publication beyond a local repo
 
 ## Provenance
 

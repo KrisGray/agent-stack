@@ -29,6 +29,7 @@
     "examples/",
     "docs/",
     ".pi/prompts/",
+    "CHANGELOG.md",
     "THIRD-PARTY-NOTICES.md",
     "LICENSE",
     "README.md"
