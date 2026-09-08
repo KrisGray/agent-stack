@@ -46,7 +46,7 @@ jobs:
       # --no-save keeps package.json lean for consumers.
       - name: Install release plugins
         if: steps.on_npm.outputs.exists == 'true'
-        run: npm install --no-save @semantic-release/changelog @semantic-release/git
+        run: npm install --no-save @semantic-release/changelog @semantic-release/git conventional-changelog-conventionalcommits
 
       - name: semantic-release
         if: steps.on_npm.outputs.exists == 'true'
