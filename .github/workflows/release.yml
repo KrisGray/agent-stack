@@ -24,10 +24,12 @@ jobs:
       - name: Test suite
         run: uv run --with pytest pytest -q tests/
 
+      # No registry-url: it exists for token auth (writes a legacy
+      # .npmrc with always-auth, which npm >= 11 warns about) and OIDC
+      # trusted publishing needs none of it.
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-          registry-url: https://registry.npmjs.org
 
       # OIDC trusted publishing requires npm >= 11.5
       - name: Latest npm
