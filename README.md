@@ -119,13 +119,16 @@ suite, bumps `package.json`, prepends `CHANGELOG.md`, commits the release
 back to `main`, tags, opens the GitHub release, and publishes to npm with
 provenance.
 
-Publishing auth is staged. Bootstrap: a short-lived granular npm token
-(`agent-stack` only, read-write, 7-day expiry) in the `NPM_TOKEN` secret
-— never a classic bypass-2FA token. Once the package exists on npm:
-Settings → Trusted Publisher → GitHub Actions (`KrisGray` / `agent-stack`
-/ `release.yml`), then remove `NPM_TOKEN` from the workflow and delete
-the token and secret. From then on publishing is OIDC — no credentials at
-rest. (Requires npm ≥ 11.5 in CI; the workflow pins latest.)
+Publishing auth is OIDC trusted publishing — no npm tokens exist, ever.
+Bootstrap once by hand (the trusted-publisher config needs the package to
+exist): `npm login` locally, `npm publish` from the repo (interactive 2FA,
+provenance not available outside CI — fine for the seed release), then on
+npmjs.com → agent-stack → Settings → Trusted Publisher → GitHub Actions
+(`KrisGray` / `agent-stack` / `release.yml`). From then on, every release
+publishes by OIDC: GitHub proves the workflow's identity to npm, provenance
+is automatic, and there is no credential anywhere to leak. (Requires
+npm ≥ 11.5 in CI; the workflow pins latest. The package name `agent-stack`
+must remain unscoped for the registry match.)
 
 ## Provenance
 

@@ -6,15 +6,11 @@ on:
 
 permissions:
   contents: write # commit the release back to main + tags + GitHub releases
-  id-token: write # npm provenance
+  id-token: write # npm trusted publishing (OIDC) + provenance
 
 jobs:
   publish:
     runs-on: ubuntu-latest
-    env:
-      # Job-level env may reference secrets; workflow-level may not.
-      # Skips publishing (green) until NPM_TOKEN is configured.
-      HAS_NPM_TOKEN: ${{ secrets.NPM_TOKEN != '' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -33,8 +29,6 @@ jobs:
         run: npm install -g npm@latest
 
       - name: semantic-release
-        if: env.HAS_NPM_TOKEN == 'true'
         run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
