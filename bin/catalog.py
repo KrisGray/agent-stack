@@ -26,7 +26,6 @@ from __future__ import annotations
 
 import json
 import os
-import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -77,10 +76,42 @@ def strip_jsonc(text: str) -> str:
         else:
             out.append(c)
             i += 1
-    stripped = "".join(out)
-    # trailing commas before } or ]
-    stripped = re.sub(r",(\s*[}\]])", r"\1", stripped)
-    return stripped
+    return "".join(out)
+
+
+def elide_trailing_commas(text: str) -> str:
+    """Remove commas whose next non-space character closes an object/array.
+    String-aware: a comma inside a string value is data and stays."""
+    out = []
+    i, n = 0, len(text)
+    in_str = False
+    while i < n:
+        c = text[i]
+        if in_str:
+            out.append(c)
+            if c == "\\" and i + 1 < n:
+                out.append(text[i + 1])
+                i += 2
+                continue
+            if c == '"':
+                in_str = False
+            i += 1
+            continue
+        if c == '"':
+            in_str = True
+            out.append(c)
+            i += 1
+            continue
+        if c == ",":
+            j = i + 1
+            while j < n and text[j] in " \t\r\n":
+                j += 1
+            if j < n and text[j] in "}]":
+                i += 1  # trailing comma: drop it, keep the whitespace
+                continue
+        out.append(c)
+        i += 1
+    return "".join(out)
 
 
 def parse_error(path: Path, exc: json.JSONDecodeError) -> None:
@@ -131,7 +162,7 @@ def main() -> None:
         sys.exit(EXIT_MISSING)
 
     try:
-        config = json.loads(strip_jsonc(config_path.read_text()))
+        config = json.loads(elide_trailing_commas(strip_jsonc(config_path.read_text(encoding="utf-8-sig"))))
     except json.JSONDecodeError as exc:
         parse_error(config_path, exc)
 
@@ -139,7 +170,7 @@ def main() -> None:
     store_missing = not store_path.exists()
     if not store_missing:
         try:
-            store = json.loads(strip_jsonc(store_path.read_text()))
+            store = json.loads(elide_trailing_commas(strip_jsonc(store_path.read_text(encoding="utf-8-sig"))))
         except json.JSONDecodeError as exc:
             parse_error(store_path, exc)
 

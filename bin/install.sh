@@ -34,6 +34,13 @@ if [ -z "$pin_file" ] && [ -f ./.ai/pm/models.json ]; then
   echo "Using pin map: $pin_file"
 fi
 
+# Fail fast: a bad pin-map path must abort before anything is copied,
+# never halfway through (copied-but-unpinned personas).
+if [ -n "$pin_file" ] && [ ! -f "$pin_file" ]; then
+  echo "pin map not found: $pin_file" >&2
+  exit 1
+fi
+
 if [ "$pin_only" -eq 1 ]; then
   if [ -z "$pin_file" ]; then
     echo "pin-only (-p) needs a pin map: pass -m FILE or create ./.ai/pm/models.json" >&2
@@ -57,7 +64,6 @@ if [ "$pin_only" -eq 0 ]; then
 fi
 
 if [ -n "$pin_file" ]; then
-  [ -f "$pin_file" ] || { echo "pin map not found: $pin_file" >&2; exit 1; }
   # Also install the catalog extractor next to the personas so /hire-pm can
   # run it from a stable path.
   if [ "$pin_only" -eq 0 ]; then
@@ -72,13 +78,43 @@ from pathlib import Path
 pin_file, dest = Path(sys.argv[1]), Path(sys.argv[2])
 pins = json.loads(pin_file.read_text())
 
+# A pin value lands verbatim in YAML frontmatter: any control character could
+# break out of the key line and inject new frontmatter keys (tools:, ...).
+def safe_value(persona, key, value):
+    if not isinstance(value, str) or not value:
+        print(f"  REJECT {persona}: {key} must be a non-empty string", file=sys.stderr)
+        return None
+    if any(ord(ch) < 0x20 or ord(ch) == 0x7F for ch in value):
+        print(f"  REJECT {persona}: {key} contains control characters (injection attempt?)", file=sys.stderr)
+        return None
+    return value
+
+# Role names are used as filenames: keep them to a slug, and resolve inside dest.
+ROLE_SLUG = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]*$")
+
 def fmt(persona, pin):
+    model = thinking = None
     if isinstance(pin, str):
-        return {"model": pin}
-    if isinstance(pin, dict) and pin.get("model"):
-        return {"model": pin["model"], **({"thinking": pin["thinking"]} if pin.get("thinking") else {})}
-    print(f"  SKIP {persona}: pin has no model", file=sys.stderr)
-    return None
+        model = pin
+    elif isinstance(pin, dict):
+        model = pin.get("model")
+        thinking = pin.get("thinking")
+    else:
+        print(f"  REJECT {persona}: pin must be a string or {{model, thinking?}}", file=sys.stderr)
+        return None
+    if not model:
+        print(f"  SKIP {persona}: pin has no model", file=sys.stderr)
+        return None
+    model = safe_value(persona, "model", model)
+    if model is None:
+        return None
+    out = {"model": model}
+    if thinking:
+        thinking = safe_value(persona, "thinking", thinking)
+        if thinking is None:
+            return None
+        out["thinking"] = thinking
+    return out
 
 def apply(path, changes):
     text = path.read_text()
@@ -94,7 +130,8 @@ def apply(path, changes):
         pattern = re.compile(rf"^{re.escape(key)}:.*$", re.MULTILINE)
         block = "".join(lines[1:end])
         if pattern.search(block):
-            lines[1:end] = pattern.sub(f"{key}: {value}", "".join(lines[1:end])).splitlines(keepends=True)
+            # callable replacement: the value is literal, never a backreference
+            lines[1:end] = pattern.sub(lambda m: f"{key}: {value}", block).splitlines(keepends=True)
             end = next(i for i in range(1, len(lines)) if lines[i].strip() == "---")
         else:
             lines.insert(1, f"{key}: {value}\n")
@@ -103,13 +140,20 @@ def apply(path, changes):
     return True
 
 applied = 0
+dest_resolved = dest.resolve()
 for persona, pin in pins.items():
+    if not ROLE_SLUG.fullmatch(persona):
+        print(f"  REJECT {persona}: invalid role name (path traversal attempt?)", file=sys.stderr)
+        continue
     changes = fmt(persona, pin)
     if changes is None:
         continue
     target = dest / f"{persona}.md"
     if not target.exists():
         print(f"  WARN {persona}: no persona at {target} (unknown role or not installed)", file=sys.stderr)
+        continue
+    if not target.resolve().is_relative_to(dest_resolved):
+        print(f"  REJECT {persona}: role resolves outside the destination", file=sys.stderr)
         continue
     if apply(target, changes):
         shown = ", ".join(f"{k}={v}" for k, v in changes.items())

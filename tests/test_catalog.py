@@ -172,3 +172,56 @@ def test_parse_error_does_not_leak_file_content(home):
     r = run_catalog(home)
     assert r.returncode != 0
     assert "sk-SECRET-CONFIG-KEY" not in r.stderr
+
+
+# --- review findings: string-safety, BOM, empty arrays, multiline comments ---
+
+
+def test_multiline_block_comment_is_stripped(home):
+    p = home / ".pi" / "agent" / "models.json"
+    p.write_text(
+        '{\n  /* a comment\n     spanning\n     lines */\n'
+        '  "providers": { "zai": { "apiKey": "s", "models": [{"id": "m"}] } }\n}\n'
+    )
+    r = run_catalog(home)
+    assert r.returncode == 0, r.stderr
+    assert r.stdout.count('"id"') == 1
+
+
+def test_trailing_comma_inside_string_value_is_preserved(home):
+    """The comma elision must be string-aware: ',}' inside a value is data."""
+    p = home / ".pi" / "agent" / "models.json"
+    p.write_text('{"providers": {"zai": {"models": [{"id": "m", "name": "a,}b"}]}}}')
+    r = run_catalog(home)
+    assert r.returncode == 0, r.stderr
+    data = json.loads(r.stdout)
+    assert data["configured"]["zai"][0]["name"] == "a,}b"
+
+
+def test_escaped_quotes_inside_strings_survive(home):
+    p = home / ".pi" / "agent" / "models.json"
+    p.write_text(
+        r'{"providers": {"zai": {"models": [{"id": "m", "name": "say \"hi\""}]}}}'
+    )
+    r = run_catalog(home)
+    assert r.returncode == 0, r.stderr
+    data = json.loads(r.stdout)
+    assert data["configured"]["zai"][0]["name"] == 'say "hi"'
+
+
+def test_bom_is_tolerated(home):
+    p = home / ".pi" / "agent" / "models.json"
+    p.write_bytes(
+        b"\xef\xbb\xbf" + b'{"providers": {"zai": {"models": [{"id": "m"}]}}}'
+    )
+    r = run_catalog(home)
+    assert r.returncode == 0, r.stderr
+    assert "zai" in json.loads(r.stdout)["configured"]
+
+
+def test_empty_models_array_yields_empty_provider(home):
+    p = home / ".pi" / "agent" / "models.json"
+    p.write_text('{"providers": {"zai": {"apiKey": "s", "models": []}}}')
+    r = run_catalog(home)
+    assert r.returncode == 0, r.stderr
+    assert json.loads(r.stdout)["configured"]["zai"] == []
