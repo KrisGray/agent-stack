@@ -15,11 +15,11 @@
   "author": "Kristian Gray",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/KrisGray/agent-stack.git"
+    "url": "git+https://github.com/KrisGray/pi-agent-stack.git"
   },
-  "homepage": "https://github.com/KrisGray/agent-stack#readme",
+  "homepage": "https://github.com/KrisGray/pi-agent-stack#readme",
   "bugs": {
-    "url": "https://github.com/KrisGray/agent-stack/issues"
+    "url": "https://github.com/KrisGray/pi-agent-stack/issues"
   },
   "files": [
     "!**/__pycache__",

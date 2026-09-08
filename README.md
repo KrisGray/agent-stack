@@ -38,7 +38,7 @@ installs them and loads their resources through agent-stack's manifest:
 ```bash
 pi install npm:pi-agent-stack
 # or from git:
-pi install git:github.com/KrisGray/agent-stack
+pi install git:github.com/KrisGray/pi-agent-stack
 ```
 
 What arrives with it:
