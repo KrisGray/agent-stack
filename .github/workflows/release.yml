@@ -42,6 +42,12 @@ jobs:
             echo "pi-agent-stack is not on npm yet — publish the seed release by hand, then register the trusted publisher. Skipping."
           fi
 
+      # semantic-release bundles most plugins; the changelog plugin is not
+      # one of them. --no-save keeps package.json lean for consumers.
+      - name: Install changelog plugin
+        if: steps.on_npm.outputs.exists == 'true'
+        run: npm install --no-save @semantic-release/changelog
+
       - name: semantic-release
         if: steps.on_npm.outputs.exists == 'true'
         run: npx semantic-release
