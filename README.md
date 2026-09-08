@@ -32,10 +32,20 @@ The pm sits **above** a `/spec → /task → /review → /ship` pipeline and nev
 
 ## Install
 
+agent-stack assumes two companion packages — core pi has no subagent
+machinery and no pipeline:
+
 ```bash
-pi install npm:agent-stack        # prompt templates (/pm, /hire-pm) load natively
-# or from git:
-pi install git:github.com/KrisGray/agent-stack
+pi install npm:pi-subagents              # the team runtime: personas, delegation, review fan-out
+pi install npm:agent-stack               # pm + charter + /spec + /task + /hire-pm
+pi install npm:@chankov/agent-skills     # /build /test /review /ship (or its successor agent-fleet)
+# agent-stack alone also installs from git:
+#   pi install git:github.com/KrisGray/agent-stack
+```
+
+Optional: `pi-ask-user` (structured interview questions — `/hire-pm` falls
+back to plain numbered questions without it) and `pi-prompt-template-model`
+(the `/hire-pm` catalog pre-step — falls back to running `bin/catalog.py`).
 
 # personas (pi packages don't ship agents natively — copy step, like agent-skills).
 # pi installs the package where the installer can find itself:
