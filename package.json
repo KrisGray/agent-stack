@@ -32,7 +32,8 @@
     "CHANGELOG.md",
     "THIRD-PARTY-NOTICES.md",
     "LICENSE",
-    "README.md"
+    "README.md",
+    "docs/assets/"
   ],
   "dependencies": {
     "@chankov/agent-skills": "0.4.2",
@@ -59,7 +60,8 @@
       "!./node_modules/@chankov/agent-skills/.pi/prompts/plan.md",
       "!./node_modules/@chankov/agent-skills/.pi/prompts/doctor-agent-skills.md",
       "!./node_modules/@chankov/agent-skills/.pi/prompts/setup-agent-skills.md"
-    ]
+    ],
+    "image": "https://raw.githubusercontent.com/KrisGray/pi-agent-stack/main/docs/assets/preview.png"
   },
   "publishConfig": {
     "access": "public"
