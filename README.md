@@ -99,7 +99,7 @@ docs/design.md     kernel/charter rationale, coverage map, /hire-pm design
 - [x] `/hire-pm` interview compiler (catalog extractor + pin rendering, tested)
 - [x] Pack-based intake interview (core bank, PACKS index, AI intake instructions, 15 archetype packs)
 - [x] Package publication (npm + GitHub — listed on the [pi.dev gallery](https://pi.dev/packages))
-- [ ] Installable generic global contract (the TDD spine the kernel assumes)
+- [x] Installable generic global contract (`templates/AGENTS.md`, seeded by `/hire-pm`)
 
 ## Releasing
 
