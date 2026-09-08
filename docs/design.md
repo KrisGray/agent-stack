@@ -1,0 +1,95 @@
+# agent-stack design
+
+Why this package is shaped the way it is.
+
+## The kernel / charter split
+
+The original pm persona (`nomgen-orm/.pi/agents/pm.md`) was simultaneously two things:
+
+1. A **role contract** — phases, gates, recovery branches, anti-rationalization — that is identical for any project run under strict TDD with the `/spec → /task → /review → /ship` pipeline.
+2. A **project charter** — nomgen's ground truth, drift test, F0, delegation rows, interview bank — that is meaningless outside that repo.
+
+Packaging it required separating them. `agents/pm.md` in this package is the kernel: the role contract, identical everywhere, referencing `.ai/pm/charter.md` for every project-specific binding. The charter is a small per-project file that may bind tighter but never weaker; where they conflict, the kernel wins.
+
+The design constraint that matters: **generality in the process, specificity in the charter.** A generalized pm that emits vague charters is worse than no pm. The current pm's value is lines like "F0 is fixed: PG18 container, drift test green in CI" — concrete, checkable, unskippable. Whatever produces charters (today: hand-written from `templates/charter.md`; later: `/hire-pm`) must compile specificity, not average it away.
+
+### Precedence
+
+```
+global AGENTS.md contract  >  pm kernel  >  project charter  >  conversation
+```
+
+The kernel is a layer on top of the global TDD contract (where they conflict, the contract wins). The charter binds the kernel to a project. Decisions live in files, never in conversation.
+
+### Coverage map — the nomgen extraction
+
+Every nomgen-specific element of the original monolithic `pm.md`, and where it now lives (`examples/nomgen/charter.md` unless noted):
+
+| Original element | New home |
+| --- | --- |
+| pgpass / password-free URL boundary | Charter → Hard boundary additions |
+| `db/nomgen_schema.sql` + `scripts/introspect.py` artefact rows | Charter → Artefact map additions |
+| `docs/schema-inventory.md` / `schema-stats.md` rows | Charter → Artefact map additions |
+| Phase 0 steps 3–4 (dump freshness, scout inventory) | Kernel generalized: ground truth + inventory per charter |
+| F0 fixed content (PG18 container, trivial model, drift test) | Charter → F0 |
+| Recovery: "the drift test goes red" | Kernel generalized: "ground truth moved", signal named by charter |
+| Delegation rows: SQLAlchemy/Pydantic/PG18 facts → researcher; nomgen shape → scout | Charter → Delegation additions |
+| Anti-rationalization: "user described the schema", "it's localhost" | Charter → Anti-rationalization additions |
+| Interview bank (Postgres/ORM questions) | `examples/nomgen/interview.md` (copied verbatim) |
+| Schema inventory checklist | `examples/nomgen/reference.md` (copied verbatim) |
+| PRD + task templates | `templates/pm-reference.md` (generic default; identical wording) |
+
+The generic halves of `reference.md` (PRD template, task template) moved to the package default. The nomgen halves stayed with the nomgen example.
+
+## The personas
+
+Eight specialist personas were imported from the live `~/.pi/agent/agents/` copies (which carry local customizations; they differ from the upstream `@chankov/agent-skills` v0.4.2 files). Three referenced roles existed nowhere on disk despite appearing in the pm's delegation map, and are authored here:
+
+- **researcher** — evidence-backed external facts, version-pinned, citations required. Tools include `web_search` / `fetch_content`; verify at install that subagents can be granted them.
+- **oracle** — adversarial second opinion on expensive-to-reverse decisions, with a decision-memo output.
+- **worker** — the `/task` discipline as a subagent persona: one task, RED-GREEN-REFACTOR, stops before committing.
+
+Pi packages ship prompts, skills, extensions and themes natively — **not** personas. `bin/install.sh` copies `agents/*.md` into pi's agent directories, the same pattern `@chankov/agent-skills` uses.
+
+## Model policy
+
+Model pins live in persona frontmatter (the only mechanism pi reads), but the *policy* — which role runs what, and why — lives in the charter. The pm verifies pins against the charter at session start and reports drift. This makes the policy reviewable per project and diffable in git, instead of frozen in eleven frontmatters nobody compares.
+
+Hard constraints encoded in the template:
+
+- Ship-gate reviewers must not share the worker's model.
+- `plan-reviewer` and `oracle` must differ from `pm`'s model.
+- Recon runs cheap; reasoning runs strong.
+
+## `/hire-pm` (designed, not yet built)
+
+A prompt template that runs in the main session and *hires* the pm for a project: an interview that produces the charter, the seeded interview bank, and the installed, pinned personas.
+
+### Interview flow
+
+1. **Project shape** (multiple choice where possible — pi's ask-user extension gives structured options with a freeform fallback): library / application / service / migration. Greenfield or existing. What is the source of truth — a database, an API contract, upstream docs, the user? This answer decides whether the charter gets a ground-truth section, whether Phase 0 gets an inventory step, and what "drift" means for this project.
+2. **Process**: which ship-gate personas, PRD formality, spec template baseline.
+3. **Domain**: what is blocking in review for this stack — proposed by the session from earlier answers, confirmed by the user. The user proposes nothing here; they confirm or correct.
+4. **F0**: the session proposes the fixed foundation task from the project shape; the user approves. Users do not know what F0 should be; asking them open-endedly produces mush.
+5. **Playback**: the charter is read back in full. Explicit approval or it does not get written.
+
+### Model selection
+
+The user's requirement: `/hire-pm` reads the models actually available to this pi install and suggests better ones when existing pins are substandard.
+
+- **Catalog source**: `~/.pi/agent/models.json` (the user's configured providers and models; JSONC — strip comments before parsing) and `~/.pi/agent/models-store.json` (the fetched catalog cache). Parse provider-qualified IDs, `reasoning`, `contextWindow`, `maxTokens`, thinking-level maps. Never display or copy `apiKey` fields anywhere — model IDs flow into charters; credentials never leave that file.
+- **Role requirements** drive the assignment: interview/review roles need strong reasoning and long context; recon needs speed and cost; the ship gate needs strength *and* diversity (the constraints above).
+- **Audit mode** when migrating a project that already has pins: flag (a) models absent from the catalog, (b) deprecated entries, (c) diversity-rule violations, (d) role mismatches — a flash model pinned to code-reviewer is a finding. Every flag cites catalog evidence or is labelled `[Inferred]`.
+- **Suggestion**: per role, recommended + two alternatives from *their* catalog, as multiple choice. Never suggest models the user cannot run.
+- **Verification**: contested picks can be delegated to `researcher` for evidence-backed confirmation (current docs, benchmark standing, deprecation notices) rather than trusting session memory of model quality — the same discipline the stack applies to library facts.
+- **Render**: the approved policy is written to the charter and rendered into each persona's frontmatter at install.
+
+## Dependency: the global contract
+
+The kernel assumes a global `~/.pi/agent/AGENTS.md` TDD contract above it ("You are a layer on top of the global TDD contract"). Consumers without one lose the RED/GREEN/REFACTOR spine the whole stack leans on. Shipping a cleaned generic version of that contract as an installable artifact is planned; until then, the dependency is documented here and in the README.
+
+## Migration path for nomgen-orm
+
+1. Copy `examples/nomgen/charter.md` → `nomgen-orm/.ai/pm/charter.md`
+2. Replace `nomgen-orm/.pi/agents/pm.md` with this package's kernel (or remove it and rely on the global install)
+3. Verify: `/pm` session start restates constraints including the charter's bindings; nothing else changes
