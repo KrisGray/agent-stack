@@ -42,6 +42,12 @@ jobs:
             echo "pi-agent-stack is not on npm yet — publish the seed release by hand, then register the trusted publisher. Skipping."
           fi
 
+      # Install the local tree so semantic-release resolves from
+      # node_modules (its changelog/git plugins are devDependencies).
+      - name: Install dependencies
+        if: steps.on_npm.outputs.exists == 'true'
+        run: npm ci
+
       - name: semantic-release
         if: steps.on_npm.outputs.exists == 'true'
         run: npx semantic-release
