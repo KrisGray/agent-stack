@@ -2,6 +2,24 @@
 
 Semver. The gallery renders this from the npm tarball.
 
+## 0.3.0
+
+One-command install — the package now distributes its companions.
+
+- npm dependencies, pinned and loaded through the pi manifest:
+  `pi-subagents` 0.66.0 (team runtime), `@chankov/agent-skills` 0.4.2
+  (pipeline: /build /test /review /ship /code-simplify + skills — spec/plan
+  excluded, agent-stack's own supersede them), `pi-ask-user` 0.15.0,
+  `pi-prompt-template-model` 0.12.2 (the /hire-pm catalog pre-step).
+- Plain dependencies, not bundled: bundling pi-subagents' transitive tree
+  would ship a 22 MB tarball; npm fetches at install time and the agent-stack
+  tarball stays ~59 kB.
+- Install docs rewritten: `pi install npm:agent-stack` is the whole setup,
+  plus the persona copy-step; migration note for existing standalone
+  installs of the same packages.
+- THIRD-PARTY-NOTICES gains a distributed-dependencies section (all MIT,
+  authored and licensed by their maintainers).
+
 ## 0.2.0
 
 The contract surface — agent-stack becomes self-coherent end to end.

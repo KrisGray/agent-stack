@@ -23,8 +23,19 @@ are reproduced below.
 
 Everything else in this package — the pm kernel (`agents/pm.md`), the
 `researcher` / `oracle` / `worker` personas, the charter format and templates,
-the interview pack system, the `/pm` and `/hire-pm` prompt templates, and the
-scripts in `bin/` — is original to agent-stack.
+the interview pack system, the `/pm`, `/hire-pm`, `/spec` and `/task` prompt
+templates, and the scripts in `bin/` — is original to agent-stack.
+
+## Distributed dependencies (installed by npm, not bundled)
+
+agent-stack declares these MIT-licensed pi packages as dependencies and loads
+their resources through its manifest. They remain their authors' work, under
+their own licenses, each carrying its LICENSE in its installed directory:
+
+- `pi-subagents` — the subagent runtime (personas, delegation, review fan-out)
+- `@chankov/agent-skills` 0.4.2 — the execution pipeline commands and skills
+- `pi-ask-user` — structured user questions
+- `pi-prompt-template-model` — deterministic prompt pre-steps
 
 The upstream license, as carried by both addyosmani/agent-skills and its
 chankov fork:

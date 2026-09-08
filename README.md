@@ -32,20 +32,31 @@ The pm sits **above** a `/spec → /task → /review → /ship` pipeline and nev
 
 ## Install
 
-agent-stack assumes two companion packages — core pi has no subagent
-machinery and no pipeline:
+One command. The package carries its companions as npm dependencies — pi
+installs them and loads their resources through agent-stack's manifest:
 
 ```bash
-pi install npm:pi-subagents              # the team runtime: personas, delegation, review fan-out
-pi install npm:agent-stack               # pm + charter + /spec + /task + /hire-pm
-pi install npm:@chankov/agent-skills     # /build /test /review /ship (or its successor agent-fleet)
-# agent-stack alone also installs from git:
-#   pi install git:github.com/KrisGray/agent-stack
+pi install npm:agent-stack
+# or from git:
+pi install git:github.com/KrisGray/agent-stack
 ```
 
-Optional: `pi-ask-user` (structured interview questions — `/hire-pm` falls
-back to plain numbered questions without it) and `pi-prompt-template-model`
-(the `/hire-pm` catalog pre-step — falls back to running `bin/catalog.py`).
+What arrives with it:
+
+- `pi-subagents` — the team runtime: the `subagent` tool, persona loading, review fan-out (core pi has none of this)
+- `@chankov/agent-skills` 0.4.2 — the execution pipeline: `/build`, `/test`, `/review`, `/ship`, `/code-simplify` and its skills (`/spec` and `/task` are agent-stack's own and shadow the generic ones — intended)
+- `pi-ask-user` — structured interview questions for `/hire-pm`
+- `pi-prompt-template-model` — deterministic pre-steps (the `/hire-pm` catalog feed)
+
+Then the personas (pi packages don't ship agents natively — copy step):
+
+```bash
+PKG=~/.pi/agent/npm/node_modules/agent-stack      # (git install: ~/.pi/agent/git/github.com/KrisGray/agent-stack)
+bash $PKG/bin/install.sh                          # → ~/.pi/agent/agents/  (global)
+bash $PKG/bin/install.sh -l                       # → ./.pi/agents/        (this project only)
+```
+
+> **Already running any of these standalone?** Remove them (`pi remove npm:pi-subagents`, `pi remove npm:@chankov/agent-skills@0.4.2`, `pi remove npm:pi-prompt-template-model`, `pi remove npm:pi-ask-user`) — agent-stack now carries them, and dual installs register duplicate resources.
 
 # personas (pi packages don't ship agents natively — copy step, like agent-skills).
 # pi installs the package where the installer can find itself:
