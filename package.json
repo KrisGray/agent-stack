@@ -1,15 +1,40 @@
 {
   "name": "agent-stack",
   "version": "0.1.0",
-  "private": true,
-  "description": "A chartered project-manager agent plus the specialist team it delegates to: kernel/charter pm, researcher, oracle, worker, and the ship-gate reviewers.",
+  "description": "A chartered project-manager agent plus the specialist team it delegates to: kernel/charter pm, pack-based intake interview, researcher, oracle, worker, and the ship-gate reviewers.",
   "keywords": [
     "pi",
-    "pi-package"
+    "pi-package",
+    "ai",
+    "agent",
+    "project-management",
+    "personas"
   ],
   "license": "MIT",
   "type": "module",
+  "author": "Kristian Gray",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KrisGray/agent-stack.git"
+  },
+  "homepage": "https://github.com/KrisGray/agent-stack#readme",
+  "bugs": {
+    "url": "https://github.com/KrisGray/agent-stack/issues"
+  },
+  "files": [
+    "!**/__pycache__",
+    "agents/",
+    "bin/",
+    "templates/",
+    "examples/",
+    "docs/",
+    ".pi/prompts/",
+    "LICENSE",
+    "README.md"
+  ],
   "pi": {
-    "prompts": ["./.pi/prompts"]
+    "prompts": [
+      "./.pi/prompts"
+    ]
   }
 }

@@ -29,12 +29,14 @@ The pm sits **above** a `/spec → /task → /review → /ship` pipeline (provid
 ## Install
 
 ```bash
+pi install npm:agent-stack        # prompt templates (/pm, /hire-pm) load natively
+# or from git:
+pi install git:github.com/KrisGray/agent-stack
+
 # personas (pi packages don't ship agents natively — copy step, like agent-skills)
+# from a checkout of this repo:
 bin/install.sh          # → ~/.pi/agent/agents/   (global)
 bin/install.sh -l       # → ./.pi/agents/         (this project only)
-
-# prompt templates (/pm and future commands) load natively
-pi install /path/to/agent-stack
 ```
 
 Then in any project:
