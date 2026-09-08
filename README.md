@@ -36,7 +36,7 @@ One command. The package carries its companions as npm dependencies — pi
 installs them and loads their resources through agent-stack's manifest:
 
 ```bash
-pi install npm:agent-stack
+pi install npm:pi-agent-stack
 # or from git:
 pi install git:github.com/KrisGray/agent-stack
 ```
@@ -60,8 +60,8 @@ bash $PKG/bin/install.sh -l                       # → ./.pi/agents/        (th
 
 # personas (pi packages don't ship agents natively — copy step, like agent-skills).
 # pi installs the package where the installer can find itself:
-PKG=~/.pi/agent/npm/node_modules/agent-stack      # global install
-# (project install: ./.pi/npm/node_modules/agent-stack)
+PKG=~/.pi/agent/npm/node_modules/pi-agent-stack   # global install
+# (project install: ./.pi/npm/node_modules/pi-agent-stack)
 bash $PKG/bin/install.sh      # → ~/.pi/agent/agents/   (global)
 bash $PKG/bin/install.sh -l   # → ./.pi/agents/         (this project only)
 # from a git checkout of this repo, bin/install.sh works the same way
@@ -121,9 +121,10 @@ provenance.
 
 Publishing auth is OIDC trusted publishing — no npm tokens exist, ever.
 Bootstrap once by hand (the trusted-publisher config needs the package to
-exist): `npm login` locally, `npm publish` from the repo (interactive 2FA,
-provenance not available outside CI — fine for the seed release), then on
-npmjs.com → agent-stack → Settings → Trusted Publisher → GitHub Actions
+exist): `npm login` locally, `npm publish` from the repo (public access is
+set via `publishConfig`; interactive 2FA; provenance not available outside
+CI — fine for the seed release), then on npmjs.com → pi-agent-stack
+→ Settings → Trusted Publisher → GitHub Actions
 (`KrisGray` / `agent-stack` / `release.yml`). From then on, every release
 publishes by OIDC: GitHub proves the workflow's identity to npm, provenance
 is automatic, and there is no credential anywhere to leak. (Requires

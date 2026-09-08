@@ -34,11 +34,11 @@ jobs:
       - name: Package exists on npm?
         id: on_npm
         run: |
-          if npm view agent-stack version >/dev/null 2>&1; then
+          if npm view pi-agent-stack version >/dev/null 2>&1; then
             echo "exists=true" >> "$GITHUB_OUTPUT"
           else
             echo "exists=false" >> "$GITHUB_OUTPUT"
-            echo "agent-stack is not on npm yet — publish the seed release by hand, then register the trusted publisher. Skipping."
+            echo "pi-agent-stack is not on npm yet — publish the seed release by hand, then register the trusted publisher. Skipping."
           fi
 
       - name: semantic-release

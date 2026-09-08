@@ -14,7 +14,7 @@ One-command install — the package now distributes its companions.
 - Plain dependencies, not bundled: bundling pi-subagents' transitive tree
   would ship a 22 MB tarball; npm fetches at install time and the agent-stack
   tarball stays ~59 kB.
-- Install docs rewritten: `pi install npm:agent-stack` is the whole setup,
+- Install docs rewritten: `pi install npm:pi-agent-stack` is the whole setup,
   plus the persona copy-step; migration note for existing standalone
   installs of the same packages.
 - THIRD-PARTY-NOTICES gains a distributed-dependencies section (all MIT,

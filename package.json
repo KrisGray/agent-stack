@@ -1,5 +1,5 @@
 {
-  "name": "agent-stack",
+  "name": "pi-agent-stack",
   "version": "0.3.0",
   "description": "A chartered project-manager agent plus the specialist team it delegates to: kernel/charter pm, pack-based intake interview, researcher, oracle, worker, and the ship-gate reviewers. Bundles the subagent runtime and the execution pipeline.",
   "keywords": [
@@ -60,5 +60,8 @@
       "!./node_modules/@chankov/agent-skills/.pi/prompts/doctor-agent-skills.md",
       "!./node_modules/@chankov/agent-skills/.pi/prompts/setup-agent-skills.md"
     ]
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
