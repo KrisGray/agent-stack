@@ -111,16 +111,14 @@ docs/design.md     kernel/charter rationale, coverage map, /hire-pm design
 
 ## Releasing
 
-Releases publish to npm from CI. Bump `version` in `package.json`, add the
-changelog entry, commit, then:
-
-```bash
-git tag v0.3.0 && git push --follow-tags
-```
-
-The `release` workflow runs the test suite, verifies the tag matches
-`package.json`, and publishes with provenance. Requires an `NPM_TOKEN`
-secret (npm Automation or granular publish token for `agent-stack`).
+Automated by [semantic-release](https://semantic-release.gitbook.io): push
+conventional commits to `main` and CI does the rest — `feat` bumps minor,
+`fix`/`perf` bump patch, breaking changes bump minor while pre-1.0, and
+`docs`/`chore`/`refactor` release nothing. On a release it runs the test
+suite, bumps `package.json`, prepends `CHANGELOG.md`, commits the release
+back to `main`, tags, opens the GitHub release, and publishes to npm with
+provenance. Requires one `NPM_TOKEN` secret (npm Automation or granular
+publish token for `agent-stack`).
 
 ## Provenance
 

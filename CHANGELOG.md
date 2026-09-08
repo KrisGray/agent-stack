@@ -1,6 +1,6 @@
 # Changelog
 
-Semver. The gallery renders this from the npm tarball.
+Versions, commits and this file are managed by semantic-release: `feat` → minor, `fix`/`perf` → patch, breaking → minor while pre-1.0.
 
 ## 0.3.0
 

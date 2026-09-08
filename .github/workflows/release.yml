@@ -2,15 +2,21 @@ name: release
 
 on:
   push:
-    tags: ["v*"]
+    branches: [main]
 
 permissions:
-  contents: read
+  contents: write # commit the release back to main + tags + GitHub releases
   id-token: write # npm provenance
+
+env:
+  # Skip gracefully (green no-op) until NPM_TOKEN is configured, instead of
+  # failing verification on a run that would release nothing anyway.
+  HAS_NPM_TOKEN: ${{ secrets.NPM_TOKEN != '' }}
 
 jobs:
   publish:
     runs-on: ubuntu-latest
+    if: env.HAS_NPM_TOKEN == 'true'
     steps:
       - uses: actions/checkout@v4
 
@@ -24,16 +30,8 @@ jobs:
           node-version: 22
           registry-url: https://registry.npmjs.org
 
-      - name: Tag matches package.json version
-        run: |
-          TAG="${GITHUB_REF_NAME#v}"
-          PKG=$(node -p "require('./package.json').version")
-          if [ "$TAG" != "$PKG" ]; then
-            echo "tag v$TAG does not match package.json version $PKG" >&2
-            exit 1
-          fi
-
-      - name: Publish
-        run: npm publish --provenance
+      - name: semantic-release
+        run: npx semantic-release
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
