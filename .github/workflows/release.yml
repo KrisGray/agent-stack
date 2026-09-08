@@ -13,7 +13,10 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
+      # full history + tags: semantic-release finds the previous release tag
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: astral-sh/setup-uv@v5
 
