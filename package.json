@@ -1,0 +1,15 @@
+{
+  "name": "agent-stack",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A chartered project-manager agent plus the specialist team it delegates to: kernel/charter pm, researcher, oracle, worker, and the ship-gate reviewers.",
+  "keywords": [
+    "pi",
+    "pi-package"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "pi": {
+    "prompts": ["./.pi/prompts"]
+  }
+}
