@@ -28,7 +28,21 @@ jobs:
       - name: Latest npm
         run: npm install -g npm@latest
 
+      # Bootstrap gate: trusted publishing can only be registered once the
+      # package exists on npm. Skip green until the seed release is published
+      # by hand; this gate turns itself off the moment the package appears.
+      - name: Package exists on npm?
+        id: on_npm
+        run: |
+          if npm view agent-stack version >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "agent-stack is not on npm yet — publish the seed release by hand, then register the trusted publisher. Skipping."
+          fi
+
       - name: semantic-release
+        if: steps.on_npm.outputs.exists == 'true'
         run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
