@@ -117,8 +117,15 @@ conventional commits to `main` and CI does the rest — `feat` bumps minor,
 `docs`/`chore`/`refactor` release nothing. On a release it runs the test
 suite, bumps `package.json`, prepends `CHANGELOG.md`, commits the release
 back to `main`, tags, opens the GitHub release, and publishes to npm with
-provenance. Requires one `NPM_TOKEN` secret (npm Automation or granular
-publish token for `agent-stack`).
+provenance.
+
+Publishing auth is staged. Bootstrap: a short-lived granular npm token
+(`agent-stack` only, read-write, 7-day expiry) in the `NPM_TOKEN` secret
+— never a classic bypass-2FA token. Once the package exists on npm:
+Settings → Trusted Publisher → GitHub Actions (`KrisGray` / `agent-stack`
+/ `release.yml`), then remove `NPM_TOKEN` from the workflow and delete
+the token and secret. From then on publishing is OIDC — no credentials at
+rest. (Requires npm ≥ 11.5 in CI; the workflow pins latest.)
 
 ## Provenance
 

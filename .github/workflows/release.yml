@@ -25,8 +25,12 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           registry-url: https://registry.npmjs.org
+
+      # OIDC trusted publishing requires npm >= 11.5
+      - name: Latest npm
+        run: npm install -g npm@latest
 
       - name: semantic-release
         if: env.HAS_NPM_TOKEN == 'true'
