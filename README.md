@@ -113,7 +113,7 @@ docs/design.md     kernel/charter rationale, coverage map, /hire-pm design
 
 Automated by [semantic-release](https://semantic-release.gitbook.io): push
 conventional commits to `main` and CI does the rest — `feat` bumps minor,
-`fix`/`perf` bump patch, breaking changes bump minor while pre-1.0, and
+`fix`/`perf` bump patch, breaking changes bump major, and
 `docs`/`chore`/`refactor` release nothing. On a release it runs the test
 suite, bumps `package.json`, prepends `CHANGELOG.md`, commits the release
 back to `main`, tags, opens the GitHub release, and publishes to npm with

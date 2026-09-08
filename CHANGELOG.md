@@ -30,7 +30,7 @@
 * **publish:** rename to pi-agent-stack — registry name conflict and pi convention ([7668f01](https://github.com/KrisGray/agent-stack/commit/7668f019eec0cfb3ac0e972b83dae29cfb5fa0ef))
 * **review:** harden pin rendering, JSONC elision, and install CWD ([e65f455](https://github.com/KrisGray/agent-stack/commit/e65f455981c6420d2a6c5d0b4693376534083f2d))
 
-Versions, commits and this file are managed by semantic-release: `feat` → minor, `fix`/`perf` → patch, breaking → minor while pre-1.0.
+Versions, commits and this file are managed by semantic-release: `feat` → minor, `fix`/`perf` → patch, breaking → major.
 
 ## 0.3.0
 
