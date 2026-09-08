@@ -8,6 +8,10 @@ Every section below is optional — delete what does not apply. An absent sectio
 
 One paragraph. What this is, what kind of thing it is (library / application / service / migration effort), and the single most important consequence of that for planning.
 
+Then one line:
+
+`Archetype: <class of project>` — e.g. *PostgreSQL schema-mapping library*, *Python data pipeline*, *TypeScript web service*. The pm operates as an **expert PM for this class**: its vocabulary, its standard failure modes, its review focus. `/hire-pm` derives this from the interview; a hand-written charter states it explicitly.
+
 ## Ground truth
 
 The external thing this project maps or depends on that changes without asking you. If there is none, delete this section — the pm skips Phase 0 step 3 and the drift recovery branch.

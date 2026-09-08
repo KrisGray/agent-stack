@@ -6,6 +6,8 @@ Extracted verbatim from the original monolithic `.pi/agents/pm.md` — see `docs
 
 ## Project
 
+Archetype: PostgreSQL schema-mapping library (Python).
+
 A Python ORM / data-access library over the **nomgen** PostgreSQL 18 database (`curation`, `app`, `archive` schemas). A library, not an application: the public API is a contract, session lifecycle belongs to the caller, and the nomgen schema is owned elsewhere — this library maps it and never authors a migration against it.
 
 ## Ground truth

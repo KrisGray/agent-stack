@@ -61,9 +61,16 @@ Hard constraints encoded in the template:
 - `plan-reviewer` and `oracle` must differ from `pm`'s model.
 - Recon runs cheap; reasoning runs strong.
 
-## `/hire-pm` (designed, not yet built)
+## `/hire-pm` (interview compiler)
 
-A prompt template that runs in the main session and *hires* the pm for a project: an interview that produces the charter, the seeded interview bank, and the installed, pinned personas.
+Built (`.pi/prompts/hire-pm.md`). A prompt template that runs in the main session and *hires* the pm for a project: an interview that produces the charter, the seeded interview bank, the reference file, the model pin map, and the installed, pinned personas. Re-running it against an existing charter enters **migration mode**: audit and amend, not re-interview.
+
+### Implementation notes
+
+- A deterministic pre-step runs `bin/catalog.py` (installed as `~/.pi/agent/bin/agent-stack-catalog.py`) before the LLM turn, so the catalog enters the session *already redacted*. The script projects the two catalog files through a **field whitelist** — `apiKey`, `baseUrl`, `headers` cannot pass through by construction, and parse errors report position only. Tested in `tests/test_catalog.py`, including the leak checks.
+- The approved policy lands in `.ai/pm/models.json` (`role → {model, thinking?}`), the machine-readable pin map. `bin/install.sh -m` renders it into persona frontmatter at copy time (`-p` re-pins without copying); the charter carries the human-readable table with the *why*. Tested in `tests/test_install.py`.
+- **Archetype binding**: the interview's first question fixes the project archetype — the class of project the pm is an expert for (PostgreSQL schema-mapping library, Python data pipeline, …). The charter records it; the kernel instructs the pm to adopt its vocabulary, failure modes and review focus. Generality stays in the process, expertise in the archetype.
+- `.ai/pm/agent-stack-path` caches the checkout location so repeat hires and audits don't re-ask.
 
 ### Interview flow
 

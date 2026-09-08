@@ -40,18 +40,24 @@ pi install /path/to/agent-stack
 Then in any project:
 
 ```bash
-/hire-pm            # designed, not yet built — see docs/design.md
+/hire-pm            # the interview: compiles the charter, seeded interview
+                    # bank, reference file, and model pin map — then installs
+                    # the personas with the approved pins
 # or by hand:
 mkdir -p .ai/pm
 cp templates/charter.md .ai/pm/charter.md   # and fill it in
 /pm
 ```
 
+`/hire-pm` on a project that already has a charter runs as an **audit**: it
+verifies installed model pins against the catalog and the charter's policy,
+flags drift, and re-pins with `bin/install.sh -p -m .ai/pm/models.json`.
+
 The pm refuses to run unchartered — a project without bindings gets generic mush, which is worse than no pm.
 
 ## Model policy
 
-Which model each persona runs is a charter section, not a frozen frontmatter accident. The pm verifies installed pins against the charter at session start and reports drift. Constraints encoded in the template: ship-gate reviewers never share the worker's model; plan-reviewer and oracle differ from pm's; recon runs cheap, reasoning runs strong. `/hire-pm` (roadmap) will read the catalog from `~/.pi/agent/models.json`, audit existing pins, and suggest per-role assignments from what you can actually run. Credentials in that file never leave it.
+Which model each persona runs is a charter section, not a frozen frontmatter accident. The pm verifies installed pins against the charter at session start and reports drift. Constraints encoded in the template: ship-gate reviewers never share the worker's model; plan-reviewer and oracle differ from pm's; recon runs cheap, reasoning runs strong. `/hire-pm` reads the catalog through a whitelisted projection (credentials stripped by construction), audits existing pins, and suggests per-role assignments from what you can actually run. Credentials never leave the catalog files.
 
 ## Layout
 
@@ -67,7 +73,7 @@ docs/design.md     kernel/charter rationale, coverage map, /hire-pm design
 ## Status
 
 - [x] Kernel/charter split, nomgen extraction, team personas, `/pm` launcher
-- [ ] `/hire-pm` interview compiler (design in `docs/design.md`)
+- [x] `/hire-pm` interview compiler (catalog extractor + pin rendering, tested))
 - [ ] Installable generic global contract (the TDD spine the kernel assumes)
 - [ ] Package publication beyond a local repo
 
