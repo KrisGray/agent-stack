@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.1](https://github.com/KrisGray/agent-stack/compare/v1.0.0...v1.0.1) (2026-09-08)
+
+### Bug Fixes
+
+* **install:** catalog extractor installs with or without a pin map ([c87bcce](https://github.com/KrisGray/agent-stack/commit/c87bcce0c7d320ac61fb232fbfaf743e4fb1ccfa))
+
 ## 1.0.0 (2026-09-08)
 
 ### Features
