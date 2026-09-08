@@ -23,7 +23,7 @@ $ARGUMENTS may carry a path to the agent-stack checkout, or the single word `aud
 
 Read: manifests (`package.json`, `pyproject.toml`, `requirements*.txt`, `go.mod`, `Cargo.toml`), `README*`, `AGENTS.md`, `docs/` listing, CI config, test layout, `git log --oneline -15`, and whether `.ai/` (specs, templates, tasks) exists.
 
-Find the **agent-stack checkout**: the path in `$ARGUMENTS`, else `.ai/pm/agent-stack-path` if present, else the installed package (`~/.pi/agent/npm/node_modules/agent-stack`, or `./.pi/npm/node_modules/agent-stack` for a project install — check both), else ask once in step 1 and record it. You need it for `templates/charter.md`, `templates/interview.md` + `templates/interview/` (the pack directory, including `PACKS.md` and `AI-INSTRUCTIONS.md`), `templates/pm-reference.md` and `bin/install.sh`.
+Find the **agent-stack checkout**: the path in `$ARGUMENTS`, else `.ai/pm/agent-stack-path` if present, else the installed package (`~/.pi/agent/npm/node_modules/agent-stack`, or `./.pi/npm/node_modules/agent-stack` for a project install — check both), else ask once in step 1 and record it. You need it for `templates/charter.md`, `templates/interview.md` + `templates/interview/` (the pack directory, including `PACKS.md` and `AI-INSTRUCTIONS.md`), `templates/pm-reference.md`, `templates/spec.md`, `templates/AGENTS.md` and `bin/install.sh`.
 
 Inventory **installed personas and their current pins**: frontmatter `model:` / `thinking:` of every `*.md` in `~/.pi/agent/agents/` and `./.pi/agents/`. These are the pins step 6 audits.
 
@@ -52,7 +52,7 @@ Propose the fixed foundation task from archetype + recon: clean-checkout install
 
 ## Step 4 — Process bindings
 
-Confirm-or-correct, with defaults: ship-gate personas (default: all three, and they must be installed), PRD formality (default: full numbered requirements), spec template baseline (default: the agent-stack generic; if `.ai/templates/spec.md` is missing, note it — `/spec` needs it and creating it is a follow-up task), where domain review rules live (default: the project's `AGENTS.md`).
+Confirm-or-correct, with defaults: ship-gate personas (default: all three, and they must be installed), PRD formality (default: full numbered requirements), spec template baseline (default: seed `.ai/templates/spec.md` verbatim from the package's `templates/spec.md` — `/spec` reads it and fails without it), where domain review rules live (default: the project's `AGENTS.md`). Also check `~/.pi/agent/AGENTS.md`: the kernel assumes a global TDD contract; if it is missing, offer to install the package's `templates/AGENTS.md` there as the starting point (confirm before writing outside the project).
 
 ## Step 5 — Domain rows
 
@@ -78,4 +78,4 @@ Render, in full, before writing anything: the charter (from `templates/charter.m
 
 ## Step 8 — Install and report
 
-Write `.ai/pm/charter.md`, `.ai/pm/interview.md`, `.ai/pm/interview/` (verbatim), `.ai/pm/AI-INSTRUCTIONS.md`, `.ai/pm/reference.md`, `.ai/pm/models.json`, and `.ai/pm/agent-stack-path`. Ask global vs project-local install, then — **from the project root**, so `-m` and `-l` resolve against this project — run `"<checkout>/bin/install.sh" [-l] [-p] -m .ai/pm/models.json`, where `<checkout>` is the path you recorded in `.ai/pm/agent-stack-path`. Never `cd` into the checkout for this: `-m .ai/pm/models.json` and project-local `-l` are both CWD-relative. Add `-p` when the personas are already installed unchanged and only pins moved. Report: files written, pins applied, drift vs the previous pins, and any follow-ups (missing `.ai/templates/spec.md`, personas not installed, unconfigured providers worth enabling). Close with: **the hire is done — run `/pm` to start.**
+Write `.ai/pm/charter.md`, `.ai/pm/interview.md`, `.ai/pm/interview/` (verbatim), `.ai/pm/AI-INSTRUCTIONS.md`, `.ai/pm/reference.md`, `.ai/pm/models.json`, `.ai/pm/agent-stack-path`, and `.ai/templates/spec.md` (seeded, unless the project already has one). Ask global vs project-local install, then — **from the project root**, so `-m` and `-l` resolve against this project — run `"<checkout>/bin/install.sh" [-l] [-p] -m .ai/pm/models.json`, where `<checkout>` is the path you recorded in `.ai/pm/agent-stack-path`. Never `cd` into the checkout for this: `-m .ai/pm/models.json` and project-local `-l` are both CWD-relative. Add `-p` when the personas are already installed unchanged and only pins moved. Report: files written, pins applied, drift vs the previous pins, and any follow-ups (missing `.ai/templates/spec.md`, personas not installed, unconfigured providers worth enabling). Close with: **the hire is done — run `/pm` to start.**

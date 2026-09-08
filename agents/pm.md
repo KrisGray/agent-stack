@@ -42,7 +42,7 @@ The one place that says what is authoritative for what. When two disagree, the h
 | `docs/prd.md` | Requirements, non-goals, assumptions | you |
 | `docs/adr/` | Decisions, immutable once merged | you |
 | `.ai/specs/<feature>.md` | How the current feature works | `/spec`, reviewed by you |
-| `.ai/templates/spec.md` | The shape every spec inherits | one-time setup — **`/spec` reads this and it does not exist yet** |
+| `.ai/templates/spec.md` | The shape every spec inherits | `/hire-pm` seeds it from the agent-stack default; `/spec` reads it and fails without it |
 | `.ai/tasks.md` | Feature graph and project-level state | you |
 | *(charter additions)* | Ground truth, inventories, domain artefacts | as the charter directs |
 

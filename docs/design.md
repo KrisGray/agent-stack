@@ -92,9 +92,11 @@ The user's requirement: `/hire-pm` reads the models actually available to this p
 - **Verification**: contested picks can be delegated to `researcher` for evidence-backed confirmation (current docs, benchmark standing, deprecation notices) rather than trusting session memory of model quality — the same discipline the stack applies to library facts.
 - **Render**: the approved policy is written to the charter and rendered into each persona's frontmatter at install.
 
-## Dependency: the global contract
+## Dependency: the global contract (v0.2: shipped)
 
-The kernel assumes a global `~/.pi/agent/AGENTS.md` TDD contract above it ("You are a layer on top of the global TDD contract"). Consumers without one lose the RED/GREEN/REFACTOR spine the whole stack leans on. Shipping a cleaned generic version of that contract as an installable artifact is planned; until then, the dependency is documented here and in the README.
+The kernel assumes a global `~/.pi/agent/AGENTS.md` TDD contract above it ("You are a layer on top of the global TDD contract"). Consumers without one lose the RED/GREEN/REFACTOR spine the whole stack leans on. **v0.2 ships the spine** as `templates/AGENTS.md`, and closes the wider coherence gap in the same move: `/spec` and `/task` now ship in `.pi/prompts/`, so the kernel's contract surface (planning-mode specs from `.ai/templates/spec.md`, claim labels, runnable Verify lines, `traces_to` IDs, the stop-before-commit task discipline) comes from the same package as the kernel that reviews it. Previously the shipped-world `/spec` was the generic skill-delegating one, and the kernel's Phase 6 checklist mismatched what it produced.
+
+Provenance was verified before rolling in: the user's `/spec` and `/task` are original implementations of their own AGENTS.md contract — no version of `@chankov/agent-skills` (0.1.0 → 1.0.8) shipped a task prompt, and every shipped spec prompt is the unrelated generic one; upstream addyosmani/agent-skills ships neither. THIRD-PARTY-NOTICES therefore still covers the eight persona files only. `/build`, `/test`, `/review`, `/ship` and the skills deliberately stay in the pipeline package — the kernel emits their command lines and reads results; owning them would collapse the layering and create a living fork of work upstream has already moved to agent-fleet.
 
 ## Migration path for nomgen-orm
 

@@ -24,7 +24,11 @@ Generality in the process, specificity in the charter. `examples/nomgen/` is the
 | `security-auditor` | Ship gate: security | `/review`, `/ship` |
 | `builder`, `planner`, `documenter` | Execution-side utilities | you, ad hoc |
 
-The pm sits **above** a `/spec → /task → /review → /ship` pipeline (provided by [@chankov/agent-skills](https://github.com/chankov/agent-skills) or its successor [agent-fleet](https://github.com/chankov/agent-fleet)) and assumes a global TDD contract in `~/.pi/agent/AGENTS.md`. It never runs those commands itself — it decides what runs, reads the results, and gates.
+The pm sits **above** a `/spec → /task → /review → /ship` pipeline and never runs those commands itself — it decides what runs, reads the results, and gates. The pipeline is split across packages, deliberately:
+
+- **`/spec` and `/task` ship with agent-stack** — they are the kernel's contract surface. `/spec` writes specs in planning mode from `.ai/templates/spec.md` (claim labels, runnable Verify lines, `traces_to` requirement IDs — exactly what the kernel's Phase 6 review checks); `/task` runs one task through a strict TDD cycle and stops before committing. If you also run [@chankov/agent-skills](https://github.com/chankov/agent-skills) or [agent-fleet](https://github.com/chankov/agent-fleet), agent-stack's `/spec` shadows their generic one — that is the intent.
+- **`/build`, `/test`, `/review`, `/ship`** come from the pipeline package — the kernel treats them as pluggable and only emits their command lines.
+- The **global TDD contract** (`~/.pi/agent/AGENTS.md`) the kernel assumes is shipped as an installable default: `templates/AGENTS.md`. `/hire-pm` checks for it and offers to seed it.
 
 ## Install
 
@@ -71,7 +75,7 @@ Which model each persona runs is a charter section, not a frozen frontmatter acc
 agents/            personas: pm kernel + 8 specialists + researcher/oracle/worker
 .pi/prompts/       pi prompt templates (shipped natively by the package)
 bin/install.sh     persona installer (global or project-local)
-templates/         charter; interview system (core bank, PACKS index, AI intake instructions, archetype packs); pm-reference
+templates/         charter; interview system (core bank, PACKS index, AI intake instructions, archetype packs); pm-reference; spec template; global AGENTS.md contract
 examples/nomgen/   worked charter/interview/reference extraction
 docs/design.md     kernel/charter rationale, coverage map, /hire-pm design
 ```
