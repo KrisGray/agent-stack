@@ -8,6 +8,7 @@ on:
 permissions:
   contents: write # commit the release back to main + tags + GitHub releases
   id-token: write # npm trusted publishing (OIDC) + provenance
+  issues: write   # semantic-release opens a tracking issue on failed releases
 
 jobs:
   publish:
