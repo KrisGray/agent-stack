@@ -3,3 +3,4 @@ node_modules/
 .pi/sessions/
 __pycache__/
 .pytest_cache/
+.pi/todos/
