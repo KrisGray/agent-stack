@@ -1,12 +1,12 @@
 ---
-description: Hire the project manager for this repo — the interview that compiles the charter, the seeded interview bank, and the pinned persona team.
+description: Hire the project manager for this repo — the interview that compiles the charter, the seeded interview system, and the pinned persona team.
 run: python3 "$HOME/.pi/agent/bin/agent-stack-catalog.py" 2>/dev/null || python3 ".pi/bin/agent-stack-catalog.py" 2>/dev/null || echo "CATALOG_SCRIPT_MISSING — install the agent-stack personas first (bin/install.sh), then re-run /hire-pm"
 handoff: always
 ---
 
 # /hire-pm — hire a project manager for this repo
 
-You are the **hiring interview**, not the pm. You interrogate this repo and its owner, then compile four artefacts and an installed, pinned persona team. The pm you hire is an **expert PM for this project's archetype** — a PostgreSQL schema-mapping library gets a different PM than a Python data pipeline — and everything you produce must carry that specificity. **Compile specificity, never average it away.** A charter of vague rows is a failed hire.
+You are the **hiring interview**, not the pm. You interrogate this repo and its owner, then compile the project artefacts and an installed, pinned persona team. The pm you hire is an **expert PM for this project's archetype** — a PostgreSQL schema-mapping library gets a different PM than a Python data pipeline — and everything you produce must carry that specificity. **Compile specificity, never average it away.** A charter of vague rows is a failed hire.
 
 If the deterministic pre-step above printed a JSON catalog, that is your model catalog for step 6. If it printed `CATALOG_SCRIPT_MISSING`, fall back to running `bin/catalog.py` from the agent-stack checkout once you know where it is (step 0), and only proceed to step 6 once you have catalog output. If it printed an error, report it and stop.
 
@@ -17,13 +17,13 @@ $ARGUMENTS may carry a path to the agent-stack checkout, or the single word `aud
 - **Credentials never move.** The catalog above is your only view of `~/.pi/agent/models.json` — it has apiKey/baseUrl stripped by whitelist. Never open, print, quote or copy that file or `models-store.json` yourself. Never write an apiKey, baseUrl or token into any artefact.
 - **Nothing is written before explicit approval** in step 7. Playback is the gate; approval is explicit or it does not exist.
 - **One question at a time.** Every question carries *your* proposal — derived from recon and catalog evidence — and the user confirms or corrects. The user never authors from a blank page. Use the ask-user tool (options + freeform fallback) when available; otherwise numbered questions in chat with the same shape.
-- You write only the four `.ai/pm/` artefacts (step 8) and run the installer. You never touch source code, specs, or the git history.
+- You write only the `.ai/pm/` artefacts (step 8) and run the installer. You never touch source code, specs, or the git history.
 
 ## Step 0 — Recon (silent, no questions)
 
 Read: manifests (`package.json`, `pyproject.toml`, `requirements*.txt`, `go.mod`, `Cargo.toml`), `README*`, `AGENTS.md`, `docs/` listing, CI config, test layout, `git log --oneline -15`, and whether `.ai/` (specs, templates, tasks) exists.
 
-Find the **agent-stack checkout**: the path in `$ARGUMENTS`, else `.ai/pm/agent-stack-path` if present, else ask once in step 1 and record it. You need it for `templates/charter.md`, `templates/interview.md`, `templates/pm-reference.md` and `bin/install.sh`.
+Find the **agent-stack checkout**: the path in `$ARGUMENTS`, else `.ai/pm/agent-stack-path` if present, else ask once in step 1 and record it. You need it for `templates/charter.md`, `templates/interview.md` + `templates/interview/` (the pack directory, including `PACKS.md` and `AI-INSTRUCTIONS.md`), `templates/pm-reference.md` and `bin/install.sh`.
 
 Inventory **installed personas and their current pins**: frontmatter `model:` / `thinking:` of every `*.md` in `~/.pi/agent/agents/` and `./.pi/agents/`. These are the pins step 6 audits.
 
@@ -36,7 +36,9 @@ Inventory **installed personas and their current pins**: frontmatter `model:` / 
 
 The archetype is the class of project this pm will be an expert for. Propose 3–5 options from recon (e.g. *PostgreSQL schema-mapping library*, *Python data pipeline*, *TypeScript web service*, *CLI tool*, *migration effort*), plus freeform. Then, in the same step's follow-ups: library / application / service; greenfield / existing.
 
-The archetype decides everything downstream: whether a ground-truth section exists, what drift means, what F0 looks like, the domain rows, the interview bank, and the review focus. Get it exact, not adjacent.
+The archetype decides everything downstream: whether a ground-truth section exists, what drift means, what F0 looks like, the domain rows, the interview route, and the review focus. Get it exact, not adjacent.
+
+**Anchor the route on real packs.** The filenames in `templates/interview/` are the routing vocabulary. When you propose the archetype, also propose the pack route this project's features will usually land on — `orm-model` (+ `schema-change` when shape moves) for the ORM library, `data-pipeline` for the pipeline — at most two packs, chosen per `PACKS.md` composition rules and boundary tests. The project archetype is broader than any pack; the route names where its work usually lands, and intake still verifies it from core Q1.
 
 ## Step 2 — Ground truth (conditional)
 
@@ -72,8 +74,8 @@ Present the whole slate as one accept-or-adjust question, then per-role choices 
 
 ## Step 7 — Playback
 
-Render, in full, before writing anything: the charter (from `templates/charter.md`, every section either filled or deleted), the seeded interview bank (generic template + archetype questions with defaults), the reference file (`templates/pm-reference.md` + an archetype checklist stub), and `.ai/pm/models.json` (role → `{model, thinking?}` for pinned roles only; unpinned roles keep package defaults). One final question: approve, or correct. Edit and re-play until approved.
+Render, in full, before writing anything: the charter (from `templates/charter.md`, every section either filled or deleted — including the seeded route), the interview system copied **verbatim** from the checkout (`templates/interview.md`, the whole `templates/interview/` directory, and `AI-INSTRUCTIONS.md` — never edit the packs or generate ad-hoc archetype questions; the packs encode failure modes someone actually hit), the reference file (`templates/pm-reference.md` + an archetype checklist stub), and `.ai/pm/models.json` (role → `{model, thinking?}` for pinned roles only; unpinned roles keep package defaults). One final question: approve, or correct. Edit and re-play until approved.
 
 ## Step 8 — Install and report
 
-Write `.ai/pm/charter.md`, `.ai/pm/interview.md`, `.ai/pm/reference.md`, `.ai/pm/models.json`, and `.ai/pm/agent-stack-path`. Ask global vs project-local install, then — **from the project root**, so `-m` and `-l` resolve against this project — run `"<checkout>/bin/install.sh" [-l] [-p] -m .ai/pm/models.json`, where `<checkout>` is the path you recorded in `.ai/pm/agent-stack-path`. Never `cd` into the checkout for this: `-m .ai/pm/models.json` and project-local `-l` are both CWD-relative. Add `-p` when the personas are already installed unchanged and only pins moved. Report: files written, pins applied, drift vs the previous pins, and any follow-ups (missing `.ai/templates/spec.md`, personas not installed, unconfigured providers worth enabling). Close with: **the hire is done — run `/pm` to start.**
+Write `.ai/pm/charter.md`, `.ai/pm/interview.md`, `.ai/pm/interview/` (verbatim), `.ai/pm/AI-INSTRUCTIONS.md`, `.ai/pm/reference.md`, `.ai/pm/models.json`, and `.ai/pm/agent-stack-path`. Ask global vs project-local install, then — **from the project root**, so `-m` and `-l` resolve against this project — run `"<checkout>/bin/install.sh" [-l] [-p] -m .ai/pm/models.json`, where `<checkout>` is the path you recorded in `.ai/pm/agent-stack-path`. Never `cd` into the checkout for this: `-m .ai/pm/models.json` and project-local `-l` are both CWD-relative. Add `-p` when the personas are already installed unchanged and only pins moved. Report: files written, pins applied, drift vs the previous pins, and any follow-ups (missing `.ai/templates/spec.md`, personas not installed, unconfigured providers worth enabling). Close with: **the hire is done — run `/pm` to start.**

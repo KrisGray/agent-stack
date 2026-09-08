@@ -40,9 +40,10 @@ pi install /path/to/agent-stack
 Then in any project:
 
 ```bash
-/hire-pm            # the interview: compiles the charter, seeded interview
-                    # bank, reference file, and model pin map — then installs
-                    # the personas with the approved pins
+/hire-pm            # the interview: compiles the charter, seeds the
+                    # interview system (core bank + archetype packs + intake
+                    # instructions + route hint), writes the model pin map —
+                    # then installs the personas with the approved pins
 # or by hand:
 mkdir -p .ai/pm
 cp templates/charter.md .ai/pm/charter.md   # and fill it in
@@ -65,7 +66,7 @@ Which model each persona runs is a charter section, not a frozen frontmatter acc
 agents/            personas: pm kernel + 8 specialists + researcher/oracle/worker
 .pi/prompts/       pi prompt templates (shipped natively by the package)
 bin/install.sh     persona installer (global or project-local)
-templates/         charter, interview, and pm-reference defaults
+templates/         charter; interview system (core bank, PACKS index, AI intake instructions, archetype packs); pm-reference
 examples/nomgen/   worked charter/interview/reference extraction
 docs/design.md     kernel/charter rationale, coverage map, /hire-pm design
 ```

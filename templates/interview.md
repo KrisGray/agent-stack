@@ -33,7 +33,12 @@ told you, and **say the classification out loud in one line** before continuing:
 
 > *"Sounds like a data pipeline — I'll ask about scheduling and failure semantics."*
 
-Load `interview/<kind>.md` and interleave its questions with the core bank below. The
+Before you ask anything, list `interview/` — the directory sibling to this file. Those
+filenames **are** the routing vocabulary. Do not route to a kind that has no file and do
+not guess at a filename; if the directory is missing or empty, there are no packs and
+that is fine.
+
+Load the matching pack and interleave its questions with the core bank below. The
 announcement is not a question and does not count against the budget.
 
 A silent misroute costs four slots and the user never learns why the questions felt
@@ -41,8 +46,28 @@ wrong — hence saying it. If the user corrects the classification, drop the pac
 immediately and re-route. Correcting a route costs the user nothing and costs you no
 question.
 
-If no pack matches, or the pack file does not exist, run the core bank alone and fill the
-remaining budget from the optional section.
+If no pack matches, run the core bank alone and fill the remaining budget from the
+optional section.
+
+### Composing packs
+
+Projects routinely span two packs — a pipeline that also changes the schema, a CLI tool
+that started life as a script, an app that needs roles. Each pack names its likely
+partners in a `Compose with:` line at the top; `interview/PACKS.md` holds the full table
+and the boundary tests for packs that sit close together.
+
+Load **at most two packs**, and cap combined pack questions at **five**: three from the
+first, two from the second. The first pack is whichever one core Q1 pointed at most
+directly. Each pack is ordered by cost-of-missing, so taking from the top is the right
+truncation.
+
+Some packs are marked *secondary* in `PACKS.md` because they rarely make sense alone —
+`schema-change` and `auth-permissions` are the current two. That is a note about which
+position they usually take, **not** a restriction on what may pair with what. Two
+primaries composing is normal and allowed.
+
+A project that needs three packs is a project that needs splitting — that is core Q2's
+problem, not routing's.
 
 ## Core bank
 
@@ -99,6 +124,26 @@ don't already cover.
 12. Anything sensitive — PII, credentials, retention obligations, licensed data?
     [default: no]
     - → *if yes:* is there a retention or deletion obligation, or is it just don't-log?
+
+13. What language, framework, and major libraries does this sit on?
+    [default: whatever the repo already uses]
+    *(Read the repo first — lockfiles, imports and config usually answer this outright.
+    Ask on greenfield, or when the answer would change. Core Q5 catches decisions the
+    user thinks of as decisions; this catches the ones they think of as background.)*
+    - → *if something is named that isn't in the project yet:* is that fixed, or a
+      starting preference you'd trade away?
+
+14. Are there modules of our own — internal packages, shared libraries, code from our
+    own repos — that this should use? [default: none]
+    - → *for each named:* where does it live, and is it pinned to a version or tracking
+      the default branch?
+
+    *(Record each one in the PRD dependency list with its provenance. First-party code is
+    the easiest supply chain to under-review: "we wrote it" reads as "it's been checked",
+    when it has usually had fewer eyes than an equivalent public package and no CVE feed
+    watching it. Anything tracking a default branch is a live dependency on someone
+    else's commits — log it under Q11's rule rather than as a settled fact. The review
+    itself is not an intake activity; carry it into Q10 as an explicit gate on done.)*
 
 ## Pack format
 

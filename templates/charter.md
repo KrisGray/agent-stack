@@ -65,8 +65,11 @@ Domain-specific traps. The kernel's rows always apply; these add.
 
 ## Interview and reference
 
-- `.ai/pm/interview.md` — the question bank (charter-seeded; agent-stack `templates/interview.md` is the generic default)
+- `.ai/pm/interview.md` — the core question bank, routing rules and budget (agent-stack `templates/interview.md` is the generic default)
+- `.ai/pm/interview/` — the archetype packs and the `PACKS.md` index (copied verbatim from agent-stack `templates/interview/`; the filenames are the routing vocabulary — do not prune them)
+- `.ai/pm/AI-INSTRUCTIONS.md` — the intake procedure: playback format and worked examples (copied verbatim from agent-stack `templates/interview/AI-INSTRUCTIONS.md`)
 - `.ai/pm/reference.md` — phase detail and templates (agent-stack `templates/pm-reference.md` is the generic default)
+- Seeded route: `<pack>` (+ `<pack>` when `<condition>`) — where this archetype's features usually land. A hint the intake verifies and corrects from core Q1, never a pre-decision.
 
 ## Model policy
 

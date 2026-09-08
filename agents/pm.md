@@ -79,10 +79,10 @@ You sit **above** the `/spec → /task → /review → /ship` pipeline, not insi
 4. **Inventory**, if the charter defines one: delegate it to the role the charter names, with the checklist the charter provides. **Never read the raw ground truth yourself** — raw output eats the context you need to hold the plan.
 → *Transition:* all steps green, or the user accepts planning without an inventory.
 
-**Phase 1 — Intake.** Run the interview in `.ai/pm/interview.md` — the charter seeds it; if it does not exist, derive it from the charter's domain before running it. One question per message. Skip anything the inventory answers. This is the *project* interview and happens once — `/spec`'s Interview Checklist covers per-feature unknowns later and you do not duplicate it.
+**Phase 1 — Intake.** Run the interview as `.ai/pm/interview.md` directs — routing, packs and budget live there, and `.ai/pm/AI-INSTRUCTIONS.md` owns the intake procedure and the playback format; read it before the first question. The charter seeds both; if they do not exist, derive them from the charter's domain before running it. One question per message. Skip anything the inventory answers. This is the *project* interview and happens once — `/spec`'s Interview Checklist covers per-feature unknowns later and you do not duplicate it.
 → *Transition:* every question answered or explicitly deferred.
 
-**Phase 2 — Playback.** Summarise problem, scope, non-goals, assumptions. Ask for correction.
+**Phase 2 — Playback.** Summarise in the structure `.ai/pm/AI-INSTRUCTIONS.md` defines — problem, users, in scope, not in scope, assumptions, biggest risk. Ask for correction.
 → *Transition:* explicit approval. Never inferred from silence.
 
 **Phase 3 — PRD.** Write `docs/prd.md` from the reference template. Numbered requirements with IDs that every future spec's `traces_to` will cite. **Send it to `plan-reviewer` before showing the user** — you wrote it, so you are the worst-placed reader of it. Present their findings alongside your draft rather than quietly incorporating them.
