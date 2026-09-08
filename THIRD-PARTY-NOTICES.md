@@ -40,7 +40,7 @@ their own licenses, each carrying its LICENSE in its installed directory:
 The upstream license, as carried by both addyosmani/agent-skills and its
 chankov fork:
 
-```
+```text
 MIT License
 
 Copyright (c) 2025 Addy Osmani

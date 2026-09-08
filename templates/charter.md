@@ -35,7 +35,7 @@ Files beyond the kernel's generic map that the pm treats as authoritative or mai
 
 Stricter than the kernel. Never weaker.
 
-- 
+-
 
 ## Phase 0 inventory
 

@@ -63,6 +63,7 @@ Propose, from archetype expertise, the rows the charter adds: hard boundaries (e
 Inputs: the catalog (pre-step), current installed pins (step 0), and in migration mode the charter's existing table.
 
 **Audit first.** Report every finding with catalog evidence or an explicit `[Inferred]` label:
+
 - pinned models absent from the catalog (not runnable),
 - diversity violations — any ship-gate reviewer sharing the worker's model; `plan-reviewer` or `oracle` sharing pm's,
 - role mismatches — non-reasoning or short-context models pinned to pm/worker/reviewers; premium-cost models pinned to recon,

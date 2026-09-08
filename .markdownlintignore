@@ -1,0 +1,6 @@
+agents/
+templates/interview/
+CHANGELOG.md
+node_modules/
+.pi/sessions/
+examples/

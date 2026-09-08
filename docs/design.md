@@ -15,7 +15,7 @@ The design constraint that matters: **generality in the process, specificity in 
 
 ### Precedence
 
-```
+```text
 global AGENTS.md contract  >  pm kernel  >  project charter  >  conversation
 ```
 

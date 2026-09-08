@@ -51,21 +51,13 @@ What arrives with it:
 Then the personas (pi packages don't ship agents natively — copy step):
 
 ```bash
-PKG=~/.pi/agent/npm/node_modules/agent-stack      # (git install: ~/.pi/agent/git/github.com/KrisGray/agent-stack)
-bash $PKG/bin/install.sh                          # → ~/.pi/agent/agents/  (global)
-bash $PKG/bin/install.sh -l                       # → ./.pi/agents/        (this project only)
+PKG=~/.pi/agent/npm/node_modules/pi-agent-stack   # global install
+# (project install: ./.pi/npm/node_modules/pi-agent-stack; a git checkout of this repo works the same)
+bash $PKG/bin/install.sh      # → ~/.pi/agent/agents/   (global)
+bash $PKG/bin/install.sh -l   # → ./.pi/agents/         (this project only)
 ```
 
 > **Already running any of these standalone?** Remove them (`pi remove npm:pi-subagents`, `pi remove npm:@chankov/agent-skills@0.4.2`, `pi remove npm:pi-prompt-template-model`, `pi remove npm:pi-ask-user`) — agent-stack now carries them, and dual installs register duplicate resources.
-
-# personas (pi packages don't ship agents natively — copy step, like agent-skills).
-# pi installs the package where the installer can find itself:
-PKG=~/.pi/agent/npm/node_modules/pi-agent-stack   # global install
-# (project install: ./.pi/npm/node_modules/pi-agent-stack)
-bash $PKG/bin/install.sh      # → ~/.pi/agent/agents/   (global)
-bash $PKG/bin/install.sh -l   # → ./.pi/agents/         (this project only)
-# from a git checkout of this repo, bin/install.sh works the same way
-```
 
 Then in any project:
 
@@ -92,7 +84,7 @@ Which model each persona runs is a charter section, not a frozen frontmatter acc
 
 ## Layout
 
-```
+```text
 agents/            personas: pm kernel + 8 specialists + researcher/oracle/worker
 .pi/prompts/       pi prompt templates (shipped natively by the package)
 bin/install.sh     persona installer (global or project-local)

@@ -43,11 +43,13 @@ plans thinks through edge cases; an agent that executes rushes to ship.
 For every unit of work, run this cycle. One subtask = one full cycle = one commit.
 
 ### 1. PLAN
+
 Take the next unchecked Task from the spec. Load it (and only it) into a fresh
 execution session. Create a working branch: `task-<id>` off a clean tree. Refuse to
 start on a dirty tree.
 
 ### 2. RED — write the failing test first
+
 - Write a test that exercises **real behavior or an integration boundary**, not mocks,
   types, or format checks.
 - For data-layer work: write an **integration test against an ephemeral test
@@ -56,17 +58,21 @@ start on a dirty tree.
   test that passes immediately.
 
 ### 3. GREEN — minimal implementation
+
 - Write the least code that makes the failing test pass. No speculative extras.
 - Run the **full** suite, not just the new test. Do not advance while anything is red.
 
 ### 4. REFACTOR
+
 - Remove duplication, improve names, keep tests green. Re-run the suite after.
 
 ### 5. COMMIT
+
 - Conventional commit referencing the subtask: `feat(<scope>): <summary> (Task <id>.<sub>)`.
 - Advance to the next subtask and return to RED.
 
 ### 6. REVIEW / SHIP (end of task)
+
 - Fan out a **parallel review** via subagents: correctness, tests/coverage, and
   security, concurrently (isolated reviewers, different models where possible).
 - Synthesize their reports into a single **go/no-go** decision.

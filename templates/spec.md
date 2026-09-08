@@ -42,7 +42,7 @@ Product scope this spec deliberately excludes. Distinct from Boundaries below, w
 
 ## Project Structure
 
-```
+```text
 [src layout — where the code this spec touches lives]
 [tests — mirrored layout, markers if used]
 ```
@@ -60,14 +60,17 @@ Each task's Verify line **is** the RED test: concrete, runnable, and written bef
 ## Boundaries
 
 **Always**
+
 - [Carry the project's AGENTS.md Always rules here — only the ones this spec's tasks can trip.]
 
 **Ask first**
+
 - Any new dependency.
 - Any change to the public API surface.
 - Any CI workflow change.
 
 **Never**
+
 - Modify an existing test rather than add one. If a test must change, stop and report.
 - [Carry the project's Never rules here.]
 
