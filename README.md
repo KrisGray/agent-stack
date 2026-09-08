@@ -109,6 +109,19 @@ docs/design.md     kernel/charter rationale, coverage map, /hire-pm design
 - [x] Package publication (npm + GitHub — listed on the [pi.dev gallery](https://pi.dev/packages))
 - [ ] Installable generic global contract (the TDD spine the kernel assumes)
 
+## Releasing
+
+Releases publish to npm from CI. Bump `version` in `package.json`, add the
+changelog entry, commit, then:
+
+```bash
+git tag v0.3.0 && git push --follow-tags
+```
+
+The `release` workflow runs the test suite, verifies the tag matches
+`package.json`, and publishes with provenance. Requires an `NPM_TOKEN`
+secret (npm Automation or granular publish token for `agent-stack`).
+
 ## Provenance
 
 Eight specialist personas are adapted from [@chankov/agent-skills](https://github.com/chankov/agent-skills) v0.4.2 (MIT), which is itself a fork of [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) by Addy Osmani (MIT) — imported from the live installed copies, with `model:`/`thinking:` pins added (`planner` verbatim). Upstream has since moved to [agent-fleet](https://github.com/chankov/agent-fleet). The pm kernel, charter format, researcher/oracle/worker personas, the interview pack system, and the scripts are original to this repo. License notices for derived material: [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md); this repo's license: MIT, see [LICENSE](LICENSE).
