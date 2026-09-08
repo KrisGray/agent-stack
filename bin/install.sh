@@ -52,6 +52,11 @@ fi
 
 count=0
 if [ "$pin_only" -eq 0 ]; then
+  # Install the catalog extractor next to the personas so /hire-pm can run it
+  # from a stable path — it is needed with or without a pin map.
+  mkdir -p "$(dirname "$dest")/bin"
+  cp "$here/bin/catalog.py" "$(dirname "$dest")/bin/agent-stack-catalog.py"
+  echo "Installed catalog extractor -> $(dirname "$dest")/bin/agent-stack-catalog.py"
   for f in "$here"/agents/*.md; do
     name="$(basename "$f")"
     if [ -f "$dest/$name" ] && ! cmp -s "$f" "$dest/$name"; then
@@ -64,13 +69,6 @@ if [ "$pin_only" -eq 0 ]; then
 fi
 
 if [ -n "$pin_file" ]; then
-  # Also install the catalog extractor next to the personas so /hire-pm can
-  # run it from a stable path.
-  if [ "$pin_only" -eq 0 ]; then
-    mkdir -p "$(dirname "$dest")/bin"
-    cp "$here/bin/catalog.py" "$(dirname "$dest")/bin/agent-stack-catalog.py"
-    echo "Installed catalog extractor -> $(dirname "$dest")/bin/agent-stack-catalog.py"
-  fi
   python3 - "$pin_file" "$dest" <<'PY'
 import json, re, sys
 from pathlib import Path

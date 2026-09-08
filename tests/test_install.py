@@ -221,3 +221,11 @@ def test_missing_pin_map_aborts_before_any_copy(home):
     r = run_install(home, "-m", str(home / "nope" / "pins.json"))
     assert r.returncode != 0
     assert not (home / ".pi" / "agent" / "agents" / "pm.md").exists()
+
+
+def test_catalog_extractor_installed_without_pin_map(home):
+    """Plain install (no -m) must still install the catalog extractor —
+    /hire-pm's pre-step looks for it at a stable path."""
+    r = run_install(home)  # no -m, no .ai/pm/models.json in cwd
+    assert r.returncode == 0, r.stderr
+    assert (home / ".pi" / "agent" / "bin" / "agent-stack-catalog.py").exists()
