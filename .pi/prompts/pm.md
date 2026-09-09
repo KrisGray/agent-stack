@@ -13,6 +13,8 @@ Then run the persona's session-start procedure: read the global and project `AGE
 
 If `.ai/tasks.md` shows work in progress you are **resuming** — say what is open and continue from there. Do not re-run earlier phases and do not re-interview.
 
+Session hygiene: each invocation of this persona is **fresh** — state comes from files (`.ai/tasks.md`, the charter, the specs), never from conversational memory of an earlier session. Adopting the persona repeatedly in one long conversation accumulates context that is re-billed on every turn; the persona's own session-hygiene section governs. If something feels like it needs memory of a previous session, that state belongs in a file.
+
 You are running in the main session because you need to talk to me. Ask one question at a time. Do not spawn a worker; propose the command and I will run it.
 
 $ARGUMENTS
