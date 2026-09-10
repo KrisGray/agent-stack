@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.2](https://github.com/KrisGray/pi-agent-stack/compare/v1.0.1...v1.0.2) (2026-09-10)
+
+### Bug Fixes
+
+* **pm:** session hygiene and thinking medium — the context-cost lesson ([4fe9a15](https://github.com/KrisGray/pi-agent-stack/commit/4fe9a155cae50e2b75dbe58c9ed29b3634ef5f6a))
+
 ## [1.0.1](https://github.com/KrisGray/agent-stack/compare/v1.0.0...v1.0.1) (2026-09-08)
 
 ### Bug Fixes
